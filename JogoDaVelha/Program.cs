@@ -2,36 +2,65 @@
 {
     private static void Main(string[] args)
     {
-        char[,] tabuleiro = new char[3, 3];
-        char simbolo = 'X';
-        char simbolo2 = 'O';
+        string[,] tabuleiro = new string[3, 3];
+        string simbolo = "X";
         int rodadas = 0;
         string tabelaretorno;
-        string nomejogador1, nomejogador2;
-        string welcomeMessage = "BEM-VINDO AO JOGO DA VELHA!";
-        Welcome();
-        void Welcome()
+        string jogada;
+        List<string> numeros = new List<string> {"1", "2", "3", "4", "5", "6",
+           "7", "8", "9"};
+        bool verifica = false;
+
+        void VerificaVitoria()
         {
-            for (int i = 0; i < 2; i++)
+            if (tabuleiro[0, 0] == tabuleiro[1, 0] && tabuleiro[1, 0] ==
+            tabuleiro[2, 0] || tabuleiro[0, 1] == tabuleiro[1, 1] &&
+            tabuleiro[1, 1] == tabuleiro[2, 1] || tabuleiro[0, 2] == tabuleiro[1, 2] &&
+            tabuleiro[1, 2] == tabuleiro[2, 2] || tabuleiro[0, 0] == tabuleiro[0, 1] &&
+            tabuleiro[0, 1] == tabuleiro[0, 2] || tabuleiro[1, 0] == tabuleiro[1, 1] &&
+            tabuleiro[1, 1] == tabuleiro[1, 2] || tabuleiro[2, 0] == tabuleiro[2, 1] &&
+            tabuleiro[2, 1] == tabuleiro[2, 2] || tabuleiro[0, 0] == tabuleiro[1, 1] && tabuleiro[1, 1] ==
+            tabuleiro[2, 2] || tabuleiro[0, 2] == tabuleiro[1, 1] &&
+            tabuleiro[1, 1] == tabuleiro[2, 0])
             {
-                Thread.Sleep(400);
-                Console.Write(welcomeMessage);
-                Thread.Sleep(400);
+                Console.WriteLine();
+                Console.WriteLine("Fim de jogo!");
+                verifica = true;
+            }
+            if (rodadas > 7 && verifica == false)
+            {
+                Console.WriteLine("\nDeu velha, fim de jogo!");
+                verifica = true;
+            }
+        }
+
+        void TrocaSimbolo()
+        {
+            if (simbolo == "X")
+            {
+                simbolo = "O";
+            }
+            else
+            {
+                simbolo = "X";
+            }
+        }
+
+        void Bemvindo()
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                Thread.Sleep(150);
+                Console.Write("**BEM-VINDO AO JOGO DA VELHA**");
+                Thread.Sleep(150);
                 Console.ForegroundColor = ConsoleColor.Black;
-                Thread.Sleep(400);
-                Console.ForegroundColor = ConsoleColor.White;
-                Thread.Sleep(400);
+                Thread.Sleep(150);
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Thread.Sleep(150);
                 Console.Clear();
             }
         }
-        {
-            Console.Write("Jogador 'X': ");
-            nomejogador1 = Console.ReadLine();
-            Console.Clear();
-            Console.Write("Jogador 'O': ");
-            nomejogador2 = Console.ReadLine();
-        }
-        void UserFirstInterection()
+        void Interacao()
         {
             Console.Clear();
             Console.WriteLine("Iniciando a partida...");
@@ -40,130 +69,105 @@
             Console.WriteLine("JOGO DA VELHA!");
             Console.Clear();
         }
+
+        Bemvindo();
+        Interacao();
+
+        Console.WriteLine("PRIMEIRO JOGADOR: X | SEGUNDO JOGADOR: O");
         Console.WriteLine();
-        tabelaretorno = DesenhoTabela();
-        Console.WriteLine(tabelaretorno);
-        string DesenhoTabela()
+
+        //Alimentando tabuleiro
+        int contador = 1;
+        for (int l = 0; l < tabuleiro.GetLength(0); l++)
         {
-            //Alimentando tabuleiro
-            char contador = '1';
+            for (int c = 0; c < tabuleiro.GetLength(1); c++)
+            {
+                tabuleiro[l, c] = contador.ToString();
+                numeros.Add(contador.ToString());
+                contador++;
+            }
+
+        }
+
+        for (int l = 0; l < tabuleiro.GetLength(0); l++)
+        {
+            for (int c = 0; c < tabuleiro.GetLength(1); c++)
+            {
+                Console.Write(tabuleiro[l, c] + " ");
+            }
+            Console.WriteLine();
+        }
+
+
+        Console.Write("\nJogue {0} na posição desejada: ", simbolo);
+        jogada = Console.ReadLine();
+        Console.Clear();
+
+        while (!numeros.Contains(jogada))
+        {
+            Console.Write("Jogada inválida, tente novamente: ");
+            jogada = Console.ReadLine();
+        }
+
+        while (rodadas < 9)
+        {
+            while (!numeros.Contains(jogada))
+            {
+                Console.Write("Jogada inválida, tente novamente: ");
+                jogada = Console.ReadLine();
+            }
+            Console.WriteLine("PRIMEIRO JOGADOR: X | SEGUNDO JOGADOR: O");
+            Console.WriteLine();
+
             for (int l = 0; l < tabuleiro.GetLength(0); l++)
             {
                 for (int c = 0; c < tabuleiro.GetLength(1); c++)
                 {
-                    tabuleiro[l, c] = contador;
-                    contador++;
+                    if (tabuleiro[l, c] == jogada && numeros.Contains(jogada) && tabuleiro[l, c] != "O")
+                    {
+                        tabuleiro[l, c] = simbolo;
+                        numeros.Remove(jogada);
+                        TrocaSimbolo();
+                        rodadas++;
+
+                    }
                 }
             }
-            string tabela = "";
             for (int l = 0; l < tabuleiro.GetLength(0); l++)
             {
+
                 for (int c = 0; c < tabuleiro.GetLength(1); c++)
                 {
                     Console.Write(tabuleiro[l, c] + " ");
                 }
                 Console.WriteLine();
             }
-            return tabela;
-        }
-        while (rodadas < 9)
-        {
-            int jogada = 0;
-            if (rodadas % 2 == 0) 
-            {
 
-                
-                do
-                {
-                    Console.Write("Escolha o número: ");
-                    jogada = int.Parse(Console.ReadLine());
-                }
-                while (jogada <= 0 || jogada > 10);
+            VerificaVitoria();
 
-                    for (int l = 0; l < tabuleiro.GetLength(0); l++)
-                    {
-                        for (int c = 0; c < tabuleiro.GetLength(1); c++)
-                        {
-                            if (jogada == tabuleiro[l, c])
-                            {
-                                tabuleiro[l, c] = simbolo;
-                            }
-                        }
-                    }
-                    for (int l = 0; l < tabuleiro.GetLength(0); l++)
-                    {
-                        for (int c = 0; c < tabuleiro.GetLength(1); c++)
-                        {
-                            Console.Write(tabuleiro[l, c] + " ");
-                        }
-                        Console.WriteLine();
-                    }
-                    rodadas++;
-                    Console.WriteLine();
-                }
-            else
+            if (verifica == true)
             {
-                for (int l = 0; l < tabuleiro.GetLength(0); l++)
-                {
-                    for (int c = 0; c < tabuleiro.GetLength(1); c++)
-                    {
-                        if (jogada == tabuleiro[l, c])
-                        {
-                            tabuleiro[l, c] = simbolo2;
-                        }
-                    }
-                }
-                for (int l = 0; l < tabuleiro.GetLength(0); l++)
-                {
-                    for (int c = 0; c < tabuleiro.GetLength(1); c++)
-                    {
-                        Console.Write(tabuleiro[l, c] + " ");
-                    }
-                    Console.WriteLine();
-                }
-                rodadas++;
-                Console.WriteLine();
-            }
-            if (tabuleiro[0, 0] == tabuleiro[1, 0] && tabuleiro[1, 0] ==
-                tabuleiro[2, 0] || tabuleiro[0, 1] == tabuleiro[1, 1] &&
-                tabuleiro[1, 1] == tabuleiro[2, 1] || tabuleiro[0, 2] == tabuleiro[1, 2] &&
-                tabuleiro[1, 2] == tabuleiro[2, 2] || tabuleiro[0, 0] == tabuleiro[0, 1] &&
-                tabuleiro[0, 1] == tabuleiro[0, 2] || tabuleiro[1, 0] == tabuleiro[1, 1] &&
-                tabuleiro[1, 1] == tabuleiro[1, 2] || tabuleiro[2, 0] == tabuleiro[2, 1] &&
-                tabuleiro[2, 1] == tabuleiro[2, 2] || tabuleiro[0, 0] == tabuleiro[1, 1] && tabuleiro[1, 1] ==
-                tabuleiro[2, 2] || tabuleiro[0, 2] == tabuleiro[1, 1] &&
-                tabuleiro[1, 1] == tabuleiro[2, 0])
-            {
-                Console.WriteLine();
-                Console.WriteLine("Fim de jogo!");
                 break;
             }
-            if (rodadas == 8)
+
+            Console.Write("\nJogue {0} na posição desejada: ", simbolo);
+            jogada = Console.ReadLine();
+
+            VerificaVitoria();
+
+            if (verifica == true)
             {
-                Console.WriteLine("Deu velha, fim de jogo!");
                 break;
             }
+
+            while (!numeros.Contains(jogada))
+            {
+                Console.Write("Jogada inválida, tente novamente: ");
+                jogada = Console.ReadLine();
+                rodadas--;
+            }
+
+            Console.Clear();
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-
-
