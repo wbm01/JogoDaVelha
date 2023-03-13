@@ -78,28 +78,28 @@
 
         //Alimentando tabuleiro
         int contador = 1;
-            for (int l = 0; l < tabuleiro.GetLength(0); l++)
+        for (int l = 0; l < tabuleiro.GetLength(0); l++)
+        {
+            for (int c = 0; c < tabuleiro.GetLength(1); c++)
             {
-                for (int c = 0; c < tabuleiro.GetLength(1); c++)
-                {
-                    tabuleiro[l, c] = contador.ToString();
-                    numeros.Add(contador.ToString());
-                    contador++;
-                }
-
+                tabuleiro[l, c] = contador.ToString();
+                numeros.Add(contador.ToString());
+                contador++;
             }
 
-            for (int l = 0; l < tabuleiro.GetLength(0); l++)
-            {
-                for (int c = 0; c < tabuleiro.GetLength(1); c++)
-                {
-                    Console.Write(tabuleiro[l, c] + " ");
-                }
-                Console.WriteLine();
-            }
-        
+        }
 
-        Console.Write("\nJogue {0} na posição desejada: ",simbolo);
+        for (int l = 0; l < tabuleiro.GetLength(0); l++)
+        {
+            for (int c = 0; c < tabuleiro.GetLength(1); c++)
+            {
+                Console.Write(tabuleiro[l, c] + " ");
+            }
+            Console.WriteLine();
+        }
+
+
+        Console.Write("\nJogue {0} na posição desejada: ", simbolo);
         jogada = Console.ReadLine();
         Console.Clear();
 
@@ -123,12 +123,13 @@
             {
                 for (int c = 0; c < tabuleiro.GetLength(1); c++)
                 {
-                    if (tabuleiro[l, c] == jogada && numeros.Contains(jogada) && tabuleiro[l,c]!= "O")
+                    if (tabuleiro[l, c] == jogada && numeros.Contains(jogada) && tabuleiro[l, c] != "O")
                     {
                         tabuleiro[l, c] = simbolo;
                         numeros.Remove(jogada);
                         TrocaSimbolo();
-                        
+                        rodadas++;
+
                     }
                 }
             }
@@ -144,15 +145,13 @@
 
             VerificaVitoria();
 
-            if(verifica == true)
+            if (verifica == true)
             {
                 break;
             }
 
             Console.Write("\nJogue {0} na posição desejada: ", simbolo);
             jogada = Console.ReadLine();
-
-            rodadas++;
 
             VerificaVitoria();
 
